@@ -1,0 +1,9 @@
+*.chm
+*.prog
+*.pdf
+*.html
+*.bin
+*.in
+*.out
+*.ipch
+/.vscode/ipch/*

@@ -1,0 +1,70 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "/home/pig2014/Catty2014.github.io"
+		}
+	],
+	"settings": {
+		"files.autoSave": "onFocusChange",
+		"code-runner.runInTerminal": true,
+		"code-runner.saveFileBeforeRun": true,
+		"code-runner.executorMap": {
+			"javascript": "node",
+			"java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
+			"c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+			"cpp": "cd $dir && g++ $fileName -DONLINE_JUDGE  -g -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+			"objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+			"php": "php",
+			"python": "python -u",
+			"perl": "perl",
+			"perl6": "perl6",
+			"ruby": "ruby",
+			"go": "go run",
+			"lua": "lua",
+			"groovy": "groovy",
+			"powershell": "powershell -ExecutionPolicy ByPass -File",
+			"bat": "cmd /c",
+			"shellscript": "bash",
+			"fsharp": "fsi",
+			"csharp": "scriptcs",
+			"vbscript": "cscript //Nologo",
+			"typescript": "ts-node",
+			"coffeescript": "coffee",
+			"scala": "scala",
+			"swift": "swift",
+			"julia": "julia",
+			"crystal": "crystal",
+			"ocaml": "ocaml",
+			"r": "Rscript",
+			"applescript": "osascript",
+			"clojure": "lein exec",
+			"haxe": "haxe --cwd $dirWithoutTrailingSlash --run $fileNameWithoutExt",
+			"rust": "cd $dir && rustc $fileName && $dir$fileNameWithoutExt",
+			"racket": "racket",
+			"ahk": "autohotkey",
+			"autoit": "autoit3",
+			"dart": "dart",
+			"pascal": "cd $dir && fpc $fileName && $dir$fileNameWithoutExt",
+			"d": "cd $dir && dmd $fileName && $dir$fileNameWithoutExt",
+			"haskell": "runhaskell",
+			"nim": "nim compile --verbosity:0 --hints:off --run",
+			"lisp": "sbcl --script"
+		},
+		"files.associations": {
+			"algorithm": "cpp",
+			"cstdio": "cpp",
+			"ostream": "cpp",
+			"cmath": "cpp"
+		},
+		"code-runner.fileDirectoryAsCwd": true,
+		"vim.easymotion": true,
+		"vim.useSystemClipboard": true,
+		"editor.fontFamily": "'Fira Code','YaHei Consolas Hybrid','Consolas', 'Courier New', monospace",
+		"editor.fontLigatures": true,
+		"markdown.extension.toc.orderedList": true,
+	},
+	
+}

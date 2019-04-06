@@ -1,0 +1,15 @@
+{
+    "code-runner.runInTerminal": true,
+    "code-runner.saveFileBeforeRun": true,
+    "code-runner.showRunCommandInEditorContextMenu": false,
+    "files.autoSave": "onFocusChange",
+    "files.associations": {
+        "iostream": "cpp",
+        "cstring": "cpp"
+    },
+    "vim.easymotion": true,
+    "vim.handleKeys": {
+        "<C-d>": true
+    },
+    "vim.normalModeKeyBindings": []
+}

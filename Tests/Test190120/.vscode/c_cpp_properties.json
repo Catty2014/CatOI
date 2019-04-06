@@ -1,0 +1,40 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/Program Files (x86)/Dev-Cpp/MinGW32/",
+                "C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.7.2/include/c++",
+                "C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.7.2/include/c++/mingw32",
+                "C:/Program Files (x86)/Dev-Cpp/MinGW32/include",
+                "C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.7.2/include",
+                "C:/Program Files (x86)/Dev-Cpp/MinGW64/",
+                "C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/mingw64/4.7.2/include/c++",
+                "C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/mingw64/4.7.2/include/c++/mingw32",
+                "C:/Program Files (x86)/Dev-Cpp/MinGW64/include",
+                "C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/mingw64/4.7.2/include",
+                "E:/TDM-GCC/x86_64-w64-mingw32/include",
+                "E:/TDM-GCC/include"
+            ],
+            "defines": [],
+            "compilerPath": "C:/Program Files (x86)/Dev-Cpp/MinGW32/bin/g++",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
