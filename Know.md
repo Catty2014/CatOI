@@ -106,9 +106,8 @@
    - C2 <font color=#DDDD11>Medium</font>
      - C2.1 状压DP
      - C2.2 [数位DP](.\LibKnlg\C2.2_DigitDP.md "==> 数位DP")
-     - C2.3 期望DP
-     - C2.4 概率DP
-     - C2.5 树上DP
+     - C2.3 概率&期望DP
+     - C2.4 树上DP
    - C3 <font color=#DD9900>HARD</font>
      - C3.1 斜率优化
      - C3.2 矩阵乘法优化
