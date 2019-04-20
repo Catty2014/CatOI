@@ -1,14 +1,8 @@
 <font face="YaHei Consolas Hybrid" size=3>
 
-# CatOI~~姿势~~知识汇总<font color=#AAAAAA size=2>(Upd v1903)</font>
+# CatOI~~姿势~~知识汇总<font color=#AAAAAA size=2>(Upd v1904)</font>
 
-注：下列按照难度等级与重要程度进行颜色划分
-
-<!--
-<font color=#0000FF>易</font> 较易 中等 较难 难
-
-普通 重要 肥肠重要
--->
+有遗漏，不足和错误之处请在评论区留言
 
 ---
 ## A Cpp语法与基础算法
@@ -35,8 +29,8 @@
      - A1.7_1 函数的使用
      - A1.7_2 函数的定义
      - A1.7_3 函数的参数
-     - A1.7_4 层层递归
-   - A1.8 字符数组--字符串<font color=#AAAAAA size=2>(C style)</font>
+     - A1.7_4 递归
+   - A1.8 字符数组&字符串<font color=#AAAAAA size=2>(C style)</font>
    - A1.9 头文件与宏定义
      - 头文件#include
      - 宏定义#define
@@ -48,7 +42,7 @@
    - A2.3 多样的输入输出 
      - A2.3_Ex cin和cout的优化
    - A2.4 结构体
-   - A2.5 另一种字符串--字符串<font color=#AAAAAA size=2>(Cpp style)</font>
+   - A2.5 字符串<font color=#AAAAAA size=2>(Cpp style)</font>
    - A2.6 STL
      - A2.6_1 vector
      - A2.6_2 stack
@@ -57,7 +51,7 @@
      - A2.6_5 priority_queue
      - A2.6_6 map
      - A2.6_7 set&muitiset
-     - A2.6_8 Algorithm
+     - A2.6_8 头文件Algorithm
  - ### A3 基础算法
    - A3.1 枚举
    - A3.2 模拟
@@ -70,6 +64,7 @@
    - A3.6 搜索<font color=#009900 size=2>Lv.1</font>
      - A3.6_1 DFS
      - A3.6_2 BFS
+
 ## B 数据结构
  - B1 <font color=#00AA00>Easy</font><!-- font color=#AAAAAA size=2 >(NOIP)</font -->
    -  B1.1 栈
@@ -90,13 +85,33 @@
    - B2.3 ST表
    - B2.4 Trie树
    - B2.5 Hash
-   - B2.6 ST表
-   - B2.7 树<font size=2 color=#AAAAAA>(Advanced)</font>
-     - B2.7_1 DFS序
-     - B2.7_2 平衡树
+   - B2.6 DFS序
 
  - B3 <font color=#DD9900>HARD</font><!-- font color=#AAAAAA size=2>(NOI)</font -->
+   -  B3.1 线段树<font color=#880000>Ex</font>
+      -  B3.1_1 权值线段树
+      -  B3.1_2 最大子段和
+      -  B3.1_3 gcd
+      -  B3.1_4 均摊分析
+      -  B3.1_5 01序列
+   - B3.2 平衡树
+      -  B3.2_1 Treap
+      -  B3.2_2 笛卡尔树
+      -  B3.2_3 Splay
+      -  B3.2_4 非旋Treap
+      -  B3.2_5 替罪羊树
+   - B3.3 树上信息维护
+      -  B3.3_1 树链剖分
+      -  B3.3_2 树上差分
+   - B3.4 LCA
+   - B3.5 持久化
+      -  B3.5_1 持久化链表
+      -  B3.5_2 主席树   
+   - B3.6 虚树 
+
+
  - B4 <font color=#EE0000>NIGHTMARE</font><!-- font color=#AAAAAA size=2>(????)</font -->
+   - B4.1 树套树
 
 ## C DP
    - C1 <font color=#00AA00>Easy</font> 
@@ -105,19 +120,22 @@
      - C1.3 区间DP
    - C2 <font color=#DDDD11>Medium</font>
      - C2.1 状压DP
-     - C2.2 [数位DP](.\LibKnlg\C2.2_DigitDP.md "==> 数位DP")
-     - C2.3 [概率&期望DP](.\LibKnlg\C2.3_ExpectionDP.md "==> 概率&期望DP")
+     - C2.2 [数位DP](/2019/04/06/C2-2-%E6%95%B0%E4%BD%8DDP/ " ==> 数位DP")
+     - C2.3 [概率&期望DP](/2019/04/06/C2-3-概率与期望DP/" "==> 概率&期望DP")
      - C2.4 树上DP
    - C3 <font color=#DD9900>HARD</font>
-     - C3.1 斜率优化
-     - C3.2 矩阵乘法优化
-     - C3.3 单调队列优化
-     - C3.4 倍增优化
-     - C3.5 四边形不等式优化
-     - C3.6 插头DP
-     - C3.7 仙人掌DP
+     - C3.1 DP的优化
+          - C3.1_1 [斜率优化]()
+          - C3.1_2 矩阵乘法优化
+          - C3.1_3 单调队列优化
+          - C3.1_4 倍增优化
+      	  - C3.1_5 四边形不等式优化
+     - C3.2 插头DP&轮廓线DP
+     - C3.3 仙人掌DP
+<!--
    - C4 <font color=#EE0000>NIGHTMARE</font>
      - <font color=#AAAAAA>(待补充...)</font>
+-->
 
 ## D 数论
 
@@ -126,5 +144,13 @@
 ## F 杂项
 
 ## X 附加资料
+
+  - X1 gcc(g++)编译详解
+  - X2 调试器使用
+  - X3 VIM使用简介
+  - X4 对拍
+  - X5 构造数据
+  - X6 骗分
+  - X7 Linux使用简介
 
 </font>
