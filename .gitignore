@@ -7,3 +7,4 @@
 *.out
 *.ipch
 /.vscode/ipch/*
+tmp*
