@@ -6,5 +6,6 @@
 *.in
 *.out
 *.ipch
+tmp*
 /.vscode/ipch/*
 tmp*

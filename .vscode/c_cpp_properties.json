@@ -29,7 +29,7 @@
                 "E:/TDM-GCC/x86_64-w64-mingw32/include",
                 "E:/TDM-GCC/include"
             ],
-            "defines": [ "ONLINE_JUDGE"],
+            "defines": [ "ONLINE_JUDGE","FILE_OUT"],
             "compilerPath": "E:/TDM-GCC/bin/g++",
             "cStandard": "c11",
             "cppStandard": "c++11",

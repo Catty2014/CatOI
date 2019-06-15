@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/zsh
 
 rm -rf *.prog
 rm -rf *.exe
-rm -rf tmp_*.*
+rm -rf tmp*.*
 rm -rf temp*.*

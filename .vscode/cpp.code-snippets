@@ -15,7 +15,7 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
-	"Comment Head":{
+	"Comment Header":{
 		"scope": "cpp,c",
 		"prefix": "/***",
 		"body": [
@@ -25,5 +25,16 @@
 			"$0"
 		],
 		"description": "Comment Header"
+	},
+	"fileout":{
+		"scope": "cpp,c",
+		"prefix": "fileout",
+		"body": [
+			"#ifdef FILE_OUT",
+			"freopen(\"tmp.in\",\"r\",stdin);",
+			"freopen(\"tmp.out\",\"w\",stdout);",
+			"#endif"
+		],
+		"description": "File I/O",
 	}
 }
