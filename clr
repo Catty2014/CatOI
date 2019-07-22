@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+echo "Unfinished Problems:"
+
+find . |grep "_U"
+
+VARTMP=$(find . |grep "_U" -c)
+
+echo "Totally $VARTMP problem(s)"
+
+DATE=$(date)
+
+VARTMP=$(find . |grep ".prog" -c)
+
+echo "Since last time,you've started to solve $VARTMP problem(s)"
+
+echo "Cleaning Up Folder..."
+
+find *.prog |rm  --
+find *.exec |rm --
+find tmp* |rm --

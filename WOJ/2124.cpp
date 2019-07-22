@@ -6,46 +6,47 @@
 #include <cstdio>
 #include <cstring>
 
-char P[133333],T[133333];
+char P[1333333],T[1333333];
 
-int nxt[133333];
+int nxt[1333333];
 int _l1,_l2;
 void c_nxt()
 {
-    nxt[0]=-1;
-    int k=-1;
-    for (int q=1;q<_l2;++q) //0 is unavaliable
+    nxt[0]=nxt[1]=0;
+    int k=0;
+    for (int q=1;q<_l2;q++) //0 is unavaliable
     {
-        while(k>-1&T[k+1]!=T[q])
+        while(k>0&&T[k]!=T[q])
         {
             k=nxt[k];
         }
-        if(T[k+1]==T[q])
+        if(T[k]==T[q])
         {
             k++;
         }
-        nxt[q]=k;
+        nxt[q+1]=k;
     }
     return ;
 }
 
 int KMP()
 {
-    int k=-1;
+    int k=0;
     int ans=0;
     for(int i=0;i<_l1;i++)
     {
-        while(k>-1&&T[k+1]!=P[i])
+        while(k>0&&T[k]!=P[i])
         {
             k=nxt[k];
         }
-        if(T[k+1]==P[i])
+        if(T[k]==P[i])
         {
             k++;
         }
-        if(k==_l2-1)
+        if(k==_l2)
         {
             ans++;
+            k=nxt[k];
         }
     }
     return ans;
@@ -53,11 +54,16 @@ int KMP()
 
 int main()
 {
-    scanf("%s",&T);
-    scanf("%s",&P);
+#ifdef FILEOUT
+    freopen("tmp.in","r",stdin);
+    freopen("tmp.out","w",stdout);
+#endif
+    scanf("%s",T);
+    scanf("%s",P);
     {
         _l1=strlen(T);
         _l2=strlen(P);
+        /* printf("%d %d\n",_l1,_l2); */
         c_nxt();
         printf("%d\n",KMP()); 
     }

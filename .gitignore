@@ -8,4 +8,4 @@
 *.ipch
 tmp*
 /.vscode/ipch/*
-tmp*
+temp*
