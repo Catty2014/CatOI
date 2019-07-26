@@ -18,7 +18,7 @@ void dijkstra(int s){
 	d[s]=0;dt[s]=0;q.push(make_pair(d[s],s));
 	while(!q.empty()){
 		pair<int,int> t=q.top();q.pop();
-		int dd=t.firs,u=t.second;
+		int dd=t.first,u=t.second;
 		if(vis[u]) continue;vis[u]=1;
 		for(int i=f[u];i;i=e[i].nxt){
 			int v=e[i].v,w=e[i].w;
