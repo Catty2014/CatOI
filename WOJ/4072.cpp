@@ -1,5 +1,3 @@
-/* LDWOJ #2698 走迷宫*/
-
 #include <cstdio>
 #include <cstring>
 
@@ -30,9 +28,9 @@ void djstr(int s)
             }
             if(d[k]==0x3f3f3f3f) return ;
             vis[k]=1;
-            for(j=1;j<=n;j++)
+            for(k=1;k<=n;k++)
             {
-                if(!vis[j]&&a[k][j]!=0x3f3f3f3f)
+                if(!vis[k]&&a[k][j]!=0x3f3f3f3f)
                 {
                     if(d[j]==d[k]+a[k][j]) g[j]+=g[k];
                     if(d[j]>d[k]+a[k][j]) 
