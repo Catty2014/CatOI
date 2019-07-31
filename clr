@@ -16,8 +16,8 @@ echo "Since last time,you've started to solve $VARTMP problem(s)"
 
 echo "Cleaning Up Folder..."
 
-find **/*.prog -delete
 find **/*.exe -delete
 find **/tmp* -delete
 find **/temp* -delete
 find **/ipch/* -delete
+find **/*.prog -delete
