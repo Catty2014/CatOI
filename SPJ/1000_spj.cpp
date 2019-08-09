@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     int s=ouf.readInt(1,100);
     if(s!=c)
     {
-        quitf(_wa,"Line1:Answer incorrect!\nExpected %d,but got %d.",c,s);
+        quitp(0.1,"Part:%d",10);
     }
     else
     {
