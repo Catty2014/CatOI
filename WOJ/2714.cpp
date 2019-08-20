@@ -1,21 +1,23 @@
-#include <bits/stdc++.h> //Code of Pig2014
-using namespace std;//Contact me:18111431031@163.com
-#define debug(x) printf("var=%d\n",x)//Language:Cpp
+#include <cstdio>
+#include <cstring>
 typedef long long ll;
-const int MOD=30013;
+const int M=30013;
+const int N=3;
 
-struct Matrix
+class Matrix
 {
-    ll a[4][4];
+public:
     int n;
+    ll a[4][4];
     Matrix (int num)
     {
         memset(a,0,sizeof(a));
         n=num;
     }
     friend Matrix operator * (Matrix A,Matrix B);
-    friend Matrix operator ^ (Matrix A,ll p);
-}A(3),B(3);
+    friend Matrix operator ^ (Matrix a,ll p);
+};
+Matrix A(3),B(3);
 
 Matrix operator * (Matrix A,Matrix B)
 {
@@ -26,7 +28,7 @@ Matrix operator * (Matrix A,Matrix B)
         {
             for(int j=1;j<=A.n;j++)
             {
-                C.a[i][j]=(C.a[i][j]+A.a[i][k]*B.a[k][j]%MOD)%MOD;
+                C.a[i][j]=(C.a[i][j]+A.a[i][k]*B.a[k][j]%M)%M;
             }
         }
     }
@@ -49,23 +51,19 @@ Matrix operator ^ (Matrix A,ll p)
     return C;
 }
 
-void init(ll a,ll b)
-{
-    A.a[1][1]=1;
-    A.a[1][2]=1;
-    B.a[1][1]=a;
-    B.a[2][1]=b;
-    B.a[1][2]=1;
-}
-
 int main()
 {
+#ifdef FILEOUT
+    freopen("tmp.in","r",stdin);
+    freopen("tmp.out","w",stdout);
+#endif
     ll a,b,n;
     scanf("%lld %lld %lld",&a,&b,&n);
-    init(a,b);
+    A.a[1][1]=A.a[1][2]=B.a[1][2]=1;
+    B.a[1][1]=a;
+    B.a[2][1]=b;
     B=B^(n-2);
     A=A*B;
     printf("%lld\n",A.a[1][1]);
     return 0;
 }
-
