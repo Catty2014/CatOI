@@ -1,7 +1,33 @@
 #include <cstdio>
+#include <cmath>
+using std::abs;
+
+typedef unsigned int uint;
 typedef long long ll;
 
-#define max(a,b) ((a>b)?a:b)
+ll gcd(ll a,ll b)
+{
+    if(a==0) return b;
+    return gcd(b%a,a);
+}
+
+void write_t(ll k,ll b) 
+{
+    /* printf("b=%lld k=%lld\n",b,k); */
+    if(k/abs(k)*b>0) printf("-");
+    k=abs(k);
+    b=abs(b);
+    if(b%k==0&&b!=k)
+    {
+        printf("%lld",b/k);
+    }
+    if(b%k!=0)
+    {
+        ll g=gcd(k,b);
+        printf("%lld/%lld",b/g,k/g);
+    }
+    return ;
+}
 
 int main()
 {
@@ -9,37 +35,24 @@ int main()
     freopen("tmp.in","r",stdin);
     freopen("tmp.out","w",stdout);
 #endif
-    ll ax,ay,bx,by;
-    while(scanf("%lld %lld %lld %lld",&ax,&ay,&bx,&by)!=-1)
+    ll xa,xb,ya,yb;
+    while(scanf("%lld %lld %lld %lld",&xa,&ya,&xb,&yb)!=-1)
     {
-        ll k,b;
-        b=max(ay,by);
-        if(ax==bx||ay==by)
+        if(xa==xb||ya==yb) 
         {
             printf("Error\n");
             continue;
         }
-        k=b/(-1*((ay==0)?ax:bx));
-        if(b>0)
-        {
-            if(k!=1&&k!=-1)printf("y=%lldx+%lld\n",k,b);
-            if(k==1) printf("y=x+%lld\n",b);
-            if(k==-1) printf("y=-x+%lld\n",b);
-        }
-        if(b<0)
-        {
-            b=-b;
-            if(k!=1&&k!=-1)printf("y=%lldx-%lld\n",k,b);
-            if(k==1) printf("y=x-%lld\n",b);
-            if(k==-1) printf("y=-x-%lld\n",b);
-        }
+        ll b=(ya==0)?yb:ya;
+        printf("y=");
+        write_t((xa==0)?xb:xa,b);
+        printf("x");
         if(b==0)
         {
-
-            if(k!=1&&k!=-1)printf("y=%lldx\n",k);
-            if(k==1) printf("y=x\n");
-            if(k==-1) printf("y=-x\n");
+            printf("\n");
+            continue;
         }
+        printf("%c%lld\n",(b>0)?'+':'-',abs(b));
     }
-
+    return 0;
 }
