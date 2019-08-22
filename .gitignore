@@ -10,3 +10,5 @@ tmp*
 /.vscode/ipch/*
 temp*
 gen*
+*.lock
+package*
