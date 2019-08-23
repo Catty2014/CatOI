@@ -21,3 +21,5 @@ find **/tmp* -delete
 find **/temp* -delete
 find **/ipch/* -delete
 find **/*.prog -delete
+
+exit 0

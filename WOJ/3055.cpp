@@ -90,11 +90,26 @@ void read()
 
 void kill(int u,int v);
 void save(int u);
-
+int atkDef(int u,int v,int t,int f);
 void cardK(int u)
 {
     /* for(int ) */
 }
+
+void cardfight(int u,int v)
+{
+    for(int i=1;;i++)
+    {
+        int p=(i&1)?u:v;
+        int t=(i&1)?v:u;
+        if(!atkDef(p,t,1,4)) return;
+    }
+}
+
+void cardF(int u)
+{
+}
+
 
 void cardP(int u)
 {
@@ -122,7 +137,36 @@ void cardZ(int u)
         {
             p[u].card.erase(p[u].card.begin()+i);
             p[u].hasBow=1;
-            return;
+        }
+    }
+}
+
+void cardW(int u)
+{
+    for(uint i=1;i<=p[u].card.size();i++)
+    {
+        if(p[u].card[i]==6)
+        {
+            p[u].card.erase(p[u].card.begin()+i);
+            for(int i=u;i<=u+n;i++)
+            {
+                atkDef(u,i,2,6);
+            }
+        }
+    }
+}
+
+void cardN(int u)
+{
+    for(uint i=1;i<=p[u].card.size();i++)
+    {
+        if(p[u].card[i]==5)
+        {
+            p[u].card.erase(p[u].card.begin()+i);
+            for(int i=u;i<=u+n;i++)
+            {
+                atkDef(u,i,1,5);
+            }
         }
     }
 }
@@ -159,6 +203,7 @@ void damage(int u,int v,int f)
 
 int atkDef(int u,int v,int t,int f)
 {
+    if(p[v].hp==-1) return 0;
     if(p[v].type==2&&p[u].type==1&&t==1&&f==4)
     {
         damage(u,v,f);
@@ -250,6 +295,10 @@ void play()
         int pl=i%n;
         if(pl==0) pl=n;
         getCard(pl,2);
+        cardP(i);
+        cardZ(i);
+        cardN(i);
+        cardW(i);
 
     }
     return ;
@@ -257,6 +306,10 @@ void play()
 
 int main()
 {
+#ifdef FILEOUT
+    freopen("tmp.in","r",stdin);
+    freopen("tmp.out","w",stdout);
+#endif
     init();
     read();
     play();
