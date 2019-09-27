@@ -1,95 +1,112 @@
-#include<bits/stdc++.h>
-#define INF 1147483647
-using namespace std;
+#include <cstring>
+#include <algorithm>
+#include <cstdio>
+#include <cmath>
 
-int n,f[1333][1333],m[1333],L;
-double NL;
+typedef double db;
+typedef long long ll;
 
-struct Cow
+const int N=233;
+const int M=66666;
+const int I=0x73333333;
+
+db d[N][N],f[N],t[N];
+int a[N],v[N],nx[N],h[N],x[N],y[N];
+int n,tt,s;
+db ans=I;
+
+void edgAdd(int x,int y)
 {
-	int x,y;
-}a[233333];
-
-double calc(const Cow&p,const Cow&q)
-{
-	return sqrt((double)(p.x-q.x)*(p.x-q.x)+(double)(p.y-q.y)*(p.y-q.y));
+    v[++tt]=y,nx[tt]=h[x],h[x]=tt;
 }
 
-void floyd()
+db calc(int i,int j)
 {
-	for(int k=1;k<=n;k++)
-	{
-		for(int i=1;i<=n;i++)
-		{
-			for(int j=1;j<=n;j++)
-			{
-				if(i!=j&&i!=k&&j!=k)
-				{
-					f[i][j]=min(f[i][j],f[i][k]+f[k][j]);   /*Floyd Min Road*/
-				}
-			}
-		}
-	}
-	for(int i=1;i<=n;i++)
-	{
-		for(int j=1;j<=n;j++)
-		{
-			if(f[i][j]!=INF)
-			{
-				if(f[i][j]>m[i])
-				{
-					m[i]=f[i][j];
-				}
-				if(f[i][j]>L)
-				{
-					L=f[i][j];
-				}
-			}
-		}
-	}
+    return std::sqrt((ll)(x[i]-x[j])*(x[i]-x[j])+(y[i]-y[j])*(y[i]-y[j]));
 }
 
-void rd()
+void dfs(int x)
 {
-	scanf("%d",&n);
-	for(int i=1;i<=n;i++)
-	{
-		scanf("%d %d",&a[i].x,&a[i].y);
-	}
-	for(int i=1;i<=n;i++)
-	{
-		for(int j=1;j<=n;j++)
-		{
-			int x;
-			scanf("%1d",&x);
-			if(x==1)
-			{
-				f[i][j]=calc(a[i],a[j]);
-			}
-			else
-			{
-				f[i][j]=INF;
-			}
-		}
-	}
+    a[x]=s;
+    t[s]=std::max(t[s],f[x]);
+    for(int i=h[x];i;i=nx[i])
+    {
+        if(!a[v[i]]) dfs(v[i]);
+    }
+}
+
+bool cmp(db x,db y)
+{
+    return x>y;
+}
+
+db mxn(db a,db b,db c)
+{
+    db x[3];
+    x[0]=a;
+    x[1]=b;
+    x[2]=c;
+    std::sort(x,x+3,cmp);
+    return x[0];
 }
 
 int main()
 {
-	rd();
-	floyd();
-	for(int i=1;i<=n;i++)
-	{
-		for(int j=1;j<=n;j++)
-		{
-			if(f[i][j]==INF&&i!=j)
-			{
-				double t=calc(a[i],a[j])+m[i]+m[j];
-				if(t<NL) NL=t;
-			}
-		}
-	}
-	if(L>NL) NL=L;
-	printf("%.6lf\n",NL);
-	return 0;
+    #ifdef FILEOUT
+        freopen("tmp.in","r",stdin);
+        freopen("tmp.out","w",stdout);
+    #endif
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            d[i][j]=I;
+        }
+    }
+    for(int i=1;i<=n;i++)
+    {
+        d[i][i]=0;
+        scanf("%d %d",&x[i],&y[i]);
+    }
+    for(int i=1;i<=n;i++)
+    {
+        char s[N];
+        scanf("%s",s);
+        for(unsigned int j=0;j<strlen(s);j++)
+        {
+            if(s[j]=='1') d[i][j]=calc(i,j),edgAdd(i,j);
+        }
+    }
+    for(int k=1;k<=n;k++)
+    {
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=1;j<=n;j++)
+            {
+                d[i][j]=std::min(d[i][j],d[i][k]+d[k][j]);
+            }
+        }
+    }
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            if(d[i][j]!=I) f[i]=std::max(d[i][j],f[i]);
+        }
+    }
+    for(int i=1;i<=n;i++)
+    {
+        if(!a[i]) s++,dfs(i);
+    }
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            if(a[i]!=a[j]) ans=std::min(ans,mxn(t[a[i]],t[a[j]],f[i]+f[j]+calc(i,j)));
+        }
+    }
+    printf("%.6lf\n",ans);
+    return 0;
 }
+
