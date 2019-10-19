@@ -1,71 +1,48 @@
-/* WOJ #2124 子串查找
- * KMP
- * Template
- */
-
 #include <cstdio>
 #include <cstring>
 
-char P[1333333],T[1333333];
+const int N=1e6+2333;
+char s[N],p[N];
+int f[N];
+int ls,lp=0;
 
-int nxt[1333333];
-int _l1,_l2;
-void c_nxt()
+void genF()
 {
-    nxt[0]=nxt[1]=0;
+    f[0]=f[1]=0;
     int k=0;
-    for (int q=1;q<_l2;q++) //0 is unavaliable
+    for(int j=1;j<lp;j++)
     {
-        while(k>0&&T[k]!=T[q])
-        {
-            k=nxt[k];
-        }
-        if(T[k]==T[q])
-        {
-            k++;
-        }
-        nxt[q+1]=k;
+        while(k&&p[j]!=p[k]) k=f[k];
+        if(p[j]==p[k]) k++;
+        f[j+1]=k;
     }
-    return ;
 }
 
-int KMP()
+int kmp()
 {
-    int k=0;
+    genF();
     int ans=0;
-    for(int i=0;i<_l1;i++)
+    int j=0,i=0;
+    while(i<ls && j<lp)
     {
-        while(k>0&&T[k]!=P[i])
-        {
-            k=nxt[k];
-        }
-        if(T[k]==P[i])
-        {
-            k++;
-        }
-        if(k==_l2)
-        {
-            ans++;
-            k=nxt[k];
-        }
+        while(j&&p[j]!=s[i]) j=f[j];
+        if(p[j]==s[i]) j++;
+        if(j==lp) ans++,j=f[j];
+        i++;
     }
     return ans;
 }
 
 int main()
 {
-#ifdef FILEOUT
-    freopen("tmp.in","r",stdin);
-    freopen("tmp.out","w",stdout);
-#endif
-    scanf("%s",T);
-    scanf("%s",P);
-    {
-        _l1=strlen(T);
-        _l2=strlen(P);
-        /* printf("%d %d\n",_l1,_l2); */
-        c_nxt();
-        printf("%d\n",KMP()); 
-    }
+    #ifdef FILEOUT
+        freopen("tmp.in","r",stdin);
+        freopen("tmp.out","w",stdout);
+    #endif
+    scanf("%s",s);
+    scanf("%s",p);
+    ls=strlen(s);
+    lp=strlen(p);
+    printf("%d\n",kmp());
     return 0;
 }

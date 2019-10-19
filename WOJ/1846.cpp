@@ -1,175 +1,113 @@
 #include <cstdio>
-#include <cstring>
+int g[12][12];
+int v[12][12][12];
+const int n=9;
 
-int a[12][12];
-bool v[12][12][12];
-
-int getCount(int x,int y)
+void showSudoku()
 {
-    int ans=0;
     for(int i=1;i<=9;i++)
     {
-        ans+=v[x][y][i];
+        for(int j=1;j<=9;j++)
+        {
+            printf("%d%c",g[i][j],(j==9)?'\n':' ');
+        }
     }
-    return ans;
+    return ;
 }
 
-void resVal(int x,int y,int w)
+void updateValidLine(int x,int p)
 {
-    for(int i=1;i<=9;i++)
-        v[x][y][i]=w;
-}
-
-int refValidNumber(int x,int y)
-{
-    resVal(x,y,1);
     for(int i=1;i<=9;i++)
     {
-        if(a[x][i]) v[x][y][a[x][i]]=0;
-        if(a[i][y]) v[x][y][a[i][y]]=0;
+        if(v[x][i][p]==1) v[x][i][10]--;
+        v[x][i][p]=0;
     }
+}
+
+void updateValidColumn(int y,int p)
+{
+    for(int i=1;i<=9;i++)
+    {
+        if(v[i][y][p]==1) v[i][y][10]--;
+        v[i][y][p]=0;
+    }
+}
+
+void updateValidBlock(int x,int y,int p)
+{
     int bx=(x-1)/3;
     int by=(y-1)/3;
-    for(int i=bx*3+1;i<=bx*3+3;i++)
-        for(int j=by*3+1;j<=by*3+3;j++)
-        {
-            if(a[i][j]) v[x][y][a[i][j]]=0;
-        }
-    int nowCount=getCount(x,y);
-    return (nowCount);
-}
-
-int filValidNumber(int x,int y)
-{
-    int ans=0;
-    for(int i=1;i<=9;i++)
+    for(int i=1;i<=3;i++)
     {
-        ans=(v[x][y][i]==1)?i:ans;
+        if(v[bx*3+i][y][p]) v[bx*3+i][y][10]--;
+        v[bx*3+i][y][p]=0;
+        if(v[x][by*3+i][p]) v[x][by*3+i][10]--;
+        v[x][by*3+i][p]=0;
     }
-    a[x][y]=ans;
-    return ans;
 }
 
-void filOnlyNumber()
+void updateValidMain();
+
+void selectOnly()
 {
-    int ap[11];
-    int plc[11];
-    memset(ap,0,sizeof(ap));
-    memset(plc,0,sizeof(plc));
     for(int i=1;i<=9;i++)
     {
         for(int j=1;j<=9;j++)
         {
+            if(v[i][j][10]==1&&g[i][j]==0)
+            {
+                for(int k=1;k<=9;k++)
+                {
+                    if(v[i][j][k]==1) g[i][j]=k;
+                }
+                updateValidMain();
+            }
+        }
+    }
+
+}
+
+void updateValidMain()
+{
+    for(int i=1;i<=9;i++)
+    {
+        for(int j=1;j<=9;j++)
+        {
+            if(g[i][j]!=0) 
+            {
+                updateValidLine(i,g[i][j]);
+                updateValidColumn(j,g[i][j]);
+                updateValidBlock(i,j,g[i][j]);
+            }
+        }
+    }
+}
+
+int main(void)
+{
+    #ifdef FILEOUT
+        freopen("tmp.in","r",stdin);
+        freopen("tmp.out","w",stdout);
+    #endif
+    for(int i=1;i<=9;i++)
+    {
+        for(int j=1;j<=9;j++)
+        {
+            scanf("%d",&g[i][j]);
             for(int k=1;k<=9;k++)
             {
-                if(v[i][j][k]==1)
-                {
-                    plc[k]=j;
-                    ap[k]++;
-                }
+                v[i][j][k]=1;
             }
-        }
-        for(int j=1;j<=9;j++)
-        {
-            if(ap[j]==1)
-            {
-                a[i][plc[j]]=j;
-                resVal(i,plc[j],0);
-            }
-        }
-        memset(ap,0,sizeof(ap));
-        memset(plc,0,sizeof(plc));
-    }
-    for(int i=1;i<=9;i++)
-    {
-        for(int j=1;j<=9;j++)
-        {
-            for(int k=1;k<=9;k++)
-            {
-                if(v[j][i][k]==1)
-                {
-                    plc[k]=j;
-                    ap[k]++;
-                }
-            }
-        }
-        for(int j=1;j<=9;j++)
-        {
-            if(ap[j]==1)
-            {
-                a[plc[j]][i]=j;
-                resVal(plc[j],i,0);
-            }
-        }
-        memset(ap,0,sizeof(ap));
-        memset(plc,0,sizeof(plc));
-    }
-}
-
-int main()
-{
-#ifdef FILEOUT
-    freopen("tmp.in","r",stdin);
-    freopen("tmp.out","w",stdout);
-#endif
-    for(int i=1;i<=9;i++)
-    {
-        for(int j=1;j<=9;j++)
-        {
-            scanf("%d",&a[i][j]);
-            resVal(i,j,0);
+            v[i][j][10]=9;
         }
     }
-    for(int i=1;i<=9;i++)
-    {
-        for(int j=1;j<=9;j++)
-        {
-            if(a[i][j]==0)
-                refValidNumber(i,j);
-        }
-    }
-    int cnt=0;
-    int cache=0;
-    do{
-        cnt=0;
-        for(int i=1;i<=9;i++)
-        {
-            for(int j=1;j<=9;j++)
-            {
-                if(a[i][j]==0)
-                {
-                    int prevCount=getCount(i,j);
-                    int ctmp=0;
-                    ctmp=refValidNumber(i,j);
-                    cnt+=prevCount-ctmp;
-                    if(ctmp==1)
-                    {
-                        int tmp2=filValidNumber(i,j);
-                        resVal(i,j,0);
-                        for(int k=1;k<=9;k++)
-                        {
-                            v[i][k][tmp2]=0;
-                            v[j][i][tmp2]=0;
-                        }
-                    }
-                }
-            }
-        }
-        filOnlyNumber();
-        if(cnt==0)
-        {
-            /* cache++; */
-        }
-        cache++;
-    }while(cache<=50);
-    /* }while(cnt!=0&&cache<=8); */
-    for(int i=1;i<=9;i++)
-    {
-        for(int j=1;j<=9;j++)
-        {
-            printf("%d ",a[i][j]);
-        }
-        printf("\n");
-    }
+    /* showSudoku(); */
+    updateValidMain();
+    selectOnly();
+    updateValidMain();
+    selectOnly();
+    updateValidMain();
+    selectOnly();
+    showSudoku();
     return 0;
 }
