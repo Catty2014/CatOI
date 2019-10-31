@@ -1,34 +1,52 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <cstdio>
+int n;
+int m;
+const int N=2333;
+int f[N];
+int v[N];
 
-int a[1333][1333]={},vst[1333]={},n,m,s=0;
-
-void dfs(int x)
+int ufsFind(int x)
 {
-    vst[x]=1;
-    for(int i=1;i<=n;i++)
+    if(f[x]==x) return f[x];
+    else return f[x]=ufsFind(f[x]);
+}
+
+void ufsJoin(int x,int y)
+{
+    int fx=ufsFind(x);
+    int fy=ufsFind(y);
+    if(fx!=fy)
     {
-        if((a[x][i]==1)&&(vst[i]==0)) dfs(i);
+        f[fx]=fy;
     }
 }
+
 int main()
 {
-    int x,y;
+    #ifdef FILEOUT
+        freopen("tmp.in","r",stdin);
+        freopen("tmp.out","w",stdout);
+    #endif
     scanf("%d %d",&n,&m);
-    for(int i=1;i<=m;i++)
-    {
-        scanf("%d %d",&x,&y);
-        a[x][y]=1;
-        a[y][x]=1;
-    }
     for(int i=1;i<=n;i++)
     {
-        if(vst[i]==0)
+        f[i]=i;
+    }
+    for(int i=1;i<=m;i++)
+    {
+        int u,v;
+        scanf("%d %d",&u,&v);
+        ufsJoin(u,v);
+    }
+    int ans=0;
+    for(int i=1;i<=n;i++)
+    {
+        if(v[ufsFind(i)]==0)
         {
-            dfs(i);s++;
+            v[ufsFind(i)]=1;
+            ans++;
         }
     }
-    printf("%d\n",s);
+    printf("%d\n",ans);
     return 0;
 }
-

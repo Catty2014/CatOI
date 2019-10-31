@@ -1,27 +1,22 @@
 #include <cstdio>
 #include <cmath>
 
-typedef long double ldb;
+typedef double ldb;
 
-const ldb PI=acos(-1.0);
-const int N=23333;
+const long double PI=3.1415926535;
+const int N=33333;
 
 struct Point
 {
-    ldb x,y;
+    int x,y;
 }p[N];
 
 ldb dis(Point a,Point b)
 {
-    return (ldb)std::sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
+    return pow((a.x-b.x),2)+pow((a.y-b.y),2);
 }
 
-ldb dm=233333333333.33;
-ldb cir()
-{
-    return (dm*dm)*PI;
-}
-ldb di=-1.00;
+int dm=2033333333;
 int main(void)
 {
     #ifdef FILEOUT
@@ -32,17 +27,20 @@ int main(void)
     scanf("%d",&n);
     for(int i=1;i<=n;i++)
     {
-        scanf("%Lf %Lf",&p[i].x,&p[i].y);
+        int xx,yy;
+        scanf("%d %d",&xx,&yy);
+        p[i].x=xx,p[i].y=yy;
     }
     for(int i=1;i<=n;i++)
     {
-        di=-1.00;
+        int di=-1;
         for(int j=1;j<=n;j++)
         {
             if(di<dis(p[i],p[j])) di=dis(p[i],p[j]);
         }
         if(di<dm) dm=di;
     }
-    printf("%.4Lf\n",cir()-0.0001);
+    printf("%.4Lf\n",dm*PI);
     return 0;
 }
+
