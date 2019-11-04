@@ -1,7 +1,6 @@
 #include <cstdio>
 #include <queue>
 #include <cstring>
-#include <algorithm>
 
 const int N=1000232/2;
 const int M=1e4+233;
@@ -9,12 +8,6 @@ const int M=1e4+233;
 class Trie
 {
 public:
-    struct Str
-    {
-        int ap;
-        char s[M];
-    }s[200];
-    int n;
     int nx[N][26],f[N],e[N];
     int r0,l;
     int add()
@@ -79,23 +72,6 @@ public:
             }
         }
     }
-    static int comp(const Str&a,const Str&b)
-    {
-        return a.ap>b.ap;
-    }
-    void sort()
-    {
-        std::sort(s+1,s+n+1,comp);
-    }
-    void output()
-    {
-        int mxn=s[0].ap;
-        for(int i=0;i<n;i++)
-        {
-            if(s[i].ap!=mxn) break;
-            printf("%s ",s[i].s);
-        }
-    }
     int query(char s[])
     {
         int ln=strlen(s);
@@ -122,21 +98,22 @@ int main()
     freopen("tmp.in","r",stdin);
     freopen("tmp.out","w",stdout);
 #endif
-    int n;
-    while(scanf("%d",&n)&&n!=0)
+    int T;
+    scanf("%d",&T);
+    while(T--)
     {
+        int n;
+        scanf("%d",&n);
         ac.init();
         for(int i=0;i<n;i++)
         {
-            scanf("%s",ac.s[i].s);
-            ac.insert(ac.s[i].s);
+            char s[M];
+            scanf("%s",s);
+            ac.insert(s);
         }
         ac.build();
         char s[M*100];
         scanf("%s",s);
         printf("%d\n",ac.query(s));
-        ac.sort();
-        ac.output();
     }
-    return 0;
 }
