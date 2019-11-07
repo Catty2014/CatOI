@@ -1,25 +1,67 @@
 #include <cstdio>
-#include <vector>
 #include <queue>
 
-typedef unsigned int uint;
-
 const int PN=12;
-const int seq[15]={0,3,8,5,6,4,1};
 
 int playerTotal,cardTotal;
 int gameOverD=0;
-int cardIsEmpty;
+int cardIsEmpty=0;
+
+class Card
+{
+    int a[1023];
+    int cnt;
+public:
+    void push(int x)
+    {
+        a[++cnt]=x;
+    }
+    int find(int x)
+    {
+        for(int i=1;i<=cnt;i++)
+        {
+            if(a[i]==x) return i;
+        }
+        return 0;
+    }
+    void del(int x)
+    {
+        int pl=find(x);
+        for(int i=pl+1;i<=cnt;i++)
+        {
+            a[i-1]=a[i];
+        }
+        cnt--;
+        if(cnt<=0) cnt=0;
+        a[cnt+1]=0;
+    }
+    void clear()
+    {
+        for(int i=1;i<=cnt;i++)
+        {
+            a[i]=0;
+        }
+        cnt=0;
+    }
+    int size()
+    {
+        return cnt;
+    }
+    int operator[](int k)
+    {
+        return a[k];
+    }
+};
 struct Player
 {
-    ///Hit-point of each player
+    int id;
+    //Hit-point of each player
     int hp;
-    //Card count
-    int card;
     //If has pig-bow
     int hasBow;
     //Cards
-    std::vector <int> cards;
+    /* std::vector <int> cards; */
+    Card c;
     //Type of player
     //1:MP
     //2.ZP
@@ -31,16 +73,11 @@ struct Player
     //3.likeFP
     //4.reallyFP
     int showType;
-    int place;
-    Player *nextPlayer;
-    Player *lastPlayer;
-    //1.Neutral
-    //2.Friendly
-    //3.Attactive
-    int attitude[PN];
+    int nextPlayer;
+    int lastPlayer;
+    int atkUsed;
 }p[PN];
 int playerCount[PN];//1:MP,2:ZP,3:FP
-
 
 std::queue <int> c;//Cards int heap
 
@@ -67,46 +104,51 @@ void initCardMap()
 }
 
 
-void getCard(int player,int count)
+void getCard(int pl,int cnt)
 {
-    for(int i=1;i<=count;i++)
+    for(int i=1;i<=cnt;i++)
     {
+        int cd=0;
         if(cardIsEmpty==0)
         {
-            int cd=c.front();
+            cd=c.front();
             c.pop();
             if(c.size()==1) cardIsEmpty=1;
-            p[player].cards.push_back(cd);
+            p[pl].c.push(cd);
         }
         else
         {
-            int cd=c.front();
-            p[player].cards.push_back(cd);
+            cd=c.front();
+            p[pl].c.push(cd);
         }
+        /* printf("%dgot%d\n",pl,cd); */
     }
 }
 
 void deleteAllCard()
 {
-    p[1].cards.clear();
+    p[1].c.clear();
     p[1].hasBow=0;
 }
 
-void gameOver(int dd)
+void gameOver()
 {
-    printf("%s\n",(dd==1)?"FP":"MP");
+    printf("%s\n",(p[1].hp<=0)?"FP":"MP");
     for(int i=1;i<=playerTotal;i++)
     {
+        /* printf("%d ",p[i].hp); */
         if(p[i].hp<=0) printf("DEAD\n");
         else
         {
-            for(uint j=0;j<p[i].cards.size();j++)
+            for(int j=1;j<=p[i].c.size();j++)
             {
-                printf("%c ",mpr[p[i].cards[j]]);
+                printf("%c ",mpr[p[i].c[j]]);
             }
             printf("\n");
         }
     }
+    /* printf("\n\n"); */
+    /* printf("%lu\n",c.size()); */
 }
 void playerDied(int src,int pl);
 int hasCard(int pl,int cc);
@@ -116,7 +158,11 @@ int judgeDeath(int pl)
 {
     if(p[pl].hp<=0)
     {
-        while(hasCard(pl,3)&&p[pl].hp<=0) useCard(pl,3);
+        while(p[pl].c.find(3)&&p[pl].hp<=0)
+        {
+            p[pl].c.del(3);
+            p[pl].hp++;
+        }
     }
     return (p[pl].hp<=0);
 }
@@ -126,7 +172,6 @@ void playerDied(int src,int pl)
     if(p[pl].type==1)
     {
         gameOverD=1;
-        gameOver(1);
     }
     if(p[pl].type==2)
     {
@@ -136,17 +181,19 @@ void playerDied(int src,int pl)
     if(p[pl].type==3)
     {
         playerCount[3]--;
-        if(playerCount[3])getCard(src,3);
+        if(playerCount[3]&&src!=pl) getCard(src,3);
         else
         {
-            gameOver(3);
+            gameOverD=1;
         }
     }
-    p[pl].lastPlayer->nextPlayer=p[pl].nextPlayer;
+    p[p[pl].lastPlayer].nextPlayer=p[pl].nextPlayer;
+    p[p[pl].nextPlayer].lastPlayer=p[pl].lastPlayer;
 }
 
 int healing(int pl)
 {
+    if(p[pl].hp==4) return 0;
     p[pl].hp++;
     return 1;
 }
@@ -157,50 +204,276 @@ int pigbow(int pl)
     return 1;
 }
 
-int WJQF(int pl)
+int queryAtk(int pl)
 {
-    for(int i=pl+1;i<pl;i++)
+    if(p[pl].c.find(1))
     {
-        if(i>playerTotal) i-=playerTotal;
-        queryVul(pl,i);
-        queryDef(pl,i);
-        if(judgeDeath(i)) playerDied(pl,i);
-    }
-    return 1;
-}
-
-int NMRQ_Unfinished(int pl)
-{
-    for(int i=pl+1;i<pl;i++)
-    {
-        if(i>playerTotal) i-=playerTotal;
-        queryVul(pl,i);
-        queryAtk(pl,i);
-        if(judgeDeath(i)) playerDied(pl,i);
-    }
-    return 1;
-}
-
-int hasCard(int pl,int cc)
-{
-    for(unsigned int i=0;i<p[pl].cards.size();i++)
-    {
-        if(p[pl].cards[i]==cc) return 1;
+        p[pl].c.del(1);
+        return 1;
     }
     return 0;
 }
 
-int useCard(int pl,int cc)
+int queryDef(int pl)
 {
-    //Part1:Delete
-    for(uint i=0;i<p[pl].cards.size();i++)
+    if(p[pl].c.find(2))
     {
-        if(p[pl].cards[i]==cc) 
+        p[pl].c.del(2);
+        return 1;
+    }
+    return 0;
+}
+
+int queryVul(int src,int tg,int ps)
+{
+    int res=0;
+    for(int i=src;i<=src+playerTotal;i++)
+    {
+        int pl=i;
+        if(pl>playerTotal) pl-=playerTotal;
+        if(p[pl].hp<=0) continue;
+        if(p[pl].c.find(7))
         {
-            p[pl].cards.erase(p[pl].cards.begin()+i);
+            if(ps==1)
+            {
+                if(p[tg].type==1)
+                {
+                    if(p[pl].type==1||p[pl].type==2)
+                    {
+                        if(p[pl].type==2) p[pl].showType=2;
+                        res=1;
+                        p[pl].c.del(7);
+                        res-=queryVul(pl,pl,0);
+                        break;
+                    }
+                }
+                if(p[tg].showType==2)
+                {
+                    if(p[pl].type==1||p[pl].type==2)
+                    {
+                        if(p[pl].type==2) p[pl].showType=2;
+                        res=1;
+                        p[pl].c.del(7);
+                        res-=queryVul(pl,pl,0);
+                        break;
+                    }
+                }
+                if(p[tg].showType==4)
+                {
+                    if(p[pl].type==3)
+                    {
+                        p[pl].showType=4;
+                        res=1;
+                        p[pl].c.del(7);
+                        res-=queryVul(pl,pl,0);
+                        break;
+                    }
+                }
+            }
+            if(ps==0)
+            {
+                if(p[tg].showType==1||p[tg].showType==2)
+                {
+                    if(p[pl].type==3)
+                    {
+                        p[pl].showType=4;
+                        res=1;
+                        p[pl].c.del(7);
+                        res-=queryVul(pl,pl,0);
+                        break;
+                    }
+                }
+                if(p[tg].showType==4)
+                {
+                    if(p[pl].showType==1||p[pl].type==2)
+                    {
+                        if(p[pl].type==2) p[pl].showType=2;
+                        res=1;
+                        p[pl].c.del(7);
+                        res-=queryVul(pl,pl,0);
+                        break;
+                    }
+                }
+            }
         }
     }
-    //Part2:Use
+    return res;
+}
+
+int fight(const int pl)
+{
+    //Part1:Search Object
+    int tg=0;
+    switch(p[pl].type)
+    {
+    case 1:
+        {
+            int vtg=pl;
+            while(p[vtg].showType<=2)
+            {
+                vtg=p[vtg].nextPlayer;
+                if(vtg==pl)
+                {
+                    return 0;
+                }
+            }
+            tg=vtg;
+            break;
+        }
+    case 2:
+        {
+            int vtg=pl;
+            while(p[vtg].showType<=3)
+            {
+                vtg=p[vtg].nextPlayer;
+                if(vtg==pl)
+                {
+                    return 0;
+                }
+            }
+            tg=vtg;
+            break;
+        }
+    case 3:
+        {
+            int vtg=pl;
+            while(p[vtg].showType!=1)
+            {
+                vtg=p[vtg].nextPlayer;
+                if(vtg==pl)
+                {
+                    break;
+                }
+            }
+            if(vtg!=pl)
+            {
+                tg=vtg;
+                break;
+            }
+            while(p[vtg].showType!=2)
+            {
+                vtg=p[vtg].nextPlayer;
+                if(vtg==pl)
+                {
+                    return 0;
+                }
+            }
+            tg=vtg;
+            break;
+        }
+    }
+    if(p[tg].showType==1||(p[tg].showType==2&&p[pl].showType!=1))
+    {
+        p[pl].showType=4;
+    }
+    if(p[tg].showType==4&&p[pl].showType!=1)
+    {
+        p[pl].showType=2;
+    }
+    while(1)
+    {
+        if(queryVul(pl,tg,1)==1) break;
+        if(queryAtk(tg)==0||p[tg].type==2)
+        {
+            p[tg].hp--;
+            if(judgeDeath(tg)) playerDied(pl,tg);
+            break;
+        }
+        /* if(queryVul(pl,pl,1)==1) break; */
+        if(queryAtk(pl)==0)
+        {
+            p[pl].hp--;
+            if(judgeDeath(pl)) playerDied(tg,pl);
+            break;
+        }
+    }
+    return 1;
+}
+
+int attack(int pl)
+{
+    if(p[pl].atkUsed==1&&p[pl].hasBow==0) return 0;
+    /* printf("Attack:%d\n",pl); */
+    int tg=p[pl].nextPlayer;
+    if(p[pl].type==1)
+    {
+        if(p[tg].showType<=2||p[tg].showType==0) return 0;
+    }
+    if(p[pl].type==2)
+    {
+        if(p[tg].showType<=3||p[tg].showType==0) return 0;
+    }
+    if(p[pl].type==3)
+    {
+        if(p[tg].showType>=3||p[tg].showType==0) return 0;
+    }
+    /* printf("Target:%d\n",tg); */
+    p[pl].atkUsed=1;
+    if(p[tg].type==1||p[tg].showType==2)
+    {
+        p[pl].showType=4;
+    }
+    if(p[pl].type!=1&&p[tg].showType==4)
+    {
+        p[pl].showType=2;
+    }
+    if(queryDef(tg)==0)
+    {
+        p[tg].hp--;
+        if(judgeDeath(tg)) playerDied(pl,tg);
+    }
+    return 1;
+}
+
+int WJQF(int pl)
+{
+    for(int ii=pl+1;ii<pl+playerTotal;ii++)
+    {
+        if(gameOverD==1) break;
+        int dmg=1;
+        int i=ii;
+        if(i>playerTotal) i-=playerTotal;
+        if(p[i].hp<=0) continue;
+        dmg-=queryVul(pl,i,1);
+        if(dmg==1)dmg-=queryDef(i);
+        if(dmg==1)
+        {
+            p[i].hp--;
+            if(p[i].type==1 && p[pl].showType==0)
+            {
+                p[pl].showType=3;
+            }
+        }
+        if(judgeDeath(i)) playerDied(pl,i);
+    }
+    return 1;
+}
+
+int NMRQ(int pl)
+{
+    for(int ii=pl+1;ii<pl+playerTotal;ii++)
+    {
+        if(gameOverD==1) break;
+        int dmg=1;
+        int i=ii;
+        if(i>playerTotal) i-=playerTotal;
+        if(p[i].hp<=0) continue;
+        dmg-=queryVul(pl,i,1);
+        if(dmg==1)dmg-=queryAtk(i);
+        if(dmg==1)
+        {
+            p[i].hp--;
+            if(p[i].type==1 && p[pl].showType==0)
+            {
+                p[pl].showType=3;
+            }
+        }
+        if(judgeDeath(i)) playerDied(pl,i);
+    }
+    return 1;
+}
+int useCard(int pl,int cc)
+{
     switch(cc)
     {
     case 3:
@@ -216,20 +489,29 @@ int useCard(int pl,int cc)
     case 1:
         return attack(pl);
     }
+    return 0;
 }
 
 void setCard(int pl)
 {
     int can_have_operation=0;
-    while(p[pl].cards.size()!=0&&can_have_operation<2)
+    while((p[pl].c.size()!=0&&can_have_operation<=2)||gameOverD==1)
     {
-        for(int i=1;i<=6;i++)
+        if(gameOverD==1)
         {
-            if(gameOverD==1) return;
-            int cc=seq[i];
-            if(hasCard(pl,cc)) 
+            gameOver();
+            return;
+        }
+        if(p[pl].hp<=0) break;
+        /* gameOver(); */
+        for(int i=1;i<=p[pl].c.size();i++)
+        {
+            int cc=p[pl].c[i];
+            if(useCard(pl,cc))
             {
-                if(useCard(pl,cc)) break;
+                p[pl].c.del(cc);
+                can_have_operation--;
+                break;
             }
         }
         can_have_operation++;
@@ -239,11 +521,19 @@ void setCard(int pl)
 
 void gamePlay()
 {
-    for(int pl=1;;pl++)
+    for(int i=1;;i++)
     {
         if(gameOverD==1) return;
+        int pl=i;
+        while(pl>playerTotal) pl-=playerTotal;
+        if(p[pl].hp<=0) continue;
         getCard(pl,2);
+        /* printf("Player#%d,round#%d:Got Card\n",pl,i); */
+        /* gameOver(); */
         setCard(pl);
+        /* printf("Player#%d:Used Card\n",pl); */
+        /* gameOver(); */
+        p[pl].atkUsed=0;
     }
 }
 
@@ -272,14 +562,17 @@ void readData()
             p[i].showType=0;
             playerCount[3]++;
         }
-        p[i].nextPlayer=&p[(i+playerTotal+1)%playerTotal];
-        p[i].lastPlayer=&p[(i+playerTotal-1)%playerTotal];
+        p[i].id=i;
+        p[i].nextPlayer=(i+1)%playerTotal;
+        p[i].lastPlayer=(i-1)%playerTotal;
+        if(p[i].nextPlayer==0) p[i].nextPlayer=playerTotal;
+        if(p[i].lastPlayer==0) p[i].lastPlayer=playerTotal;
         p[i].hp=4;
-        for(int i=1;i<=4;i++)
+        for(int j=1;j<=4;j++)
         {
             char s[5];
             scanf("%s",s);
-            p[i].cards.push_back(mpl[(int)s[0]]);
+            p[i].c.push(mpl[(int)s[0]]);
         }
     }
     for(int i=1;i<=cardTotal;i++)
@@ -301,3 +594,4 @@ int main()
     gamePlay();
     return 0;
 }
+
